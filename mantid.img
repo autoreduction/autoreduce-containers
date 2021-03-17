@@ -1,6 +1,10 @@
 Bootstrap: localimage
 From: python36.sif
 
+%files
+  Mantid.user.properties ~/.mantid/Mantid.user.properties
+  ../autoreduce/build /autoreduce/build
+
 %post
   export DEBIAN_FRONTEND=noninteractive
   # add the mantid signing key
@@ -8,3 +12,4 @@ From: python36.sif
   apt-add-repository ppa:mantid/mantid
   apt-get update
   apt-get install -y libglu1-mesa mantid
+  cp /opt/Mantid/bin/Mantid.properties /opt/Mantid/lib/Mantid.properties
