@@ -10,7 +10,10 @@ This is a base container that installs:
 
 
 ### Binding paths
-However it requires binding of the source repository via `--bind`.
+There are a few folders that need to be mounted:
+- The Autoreduce source code
+- The ISIS Archive
+- The CEPH mount
 
 An example run command can be seen in the Makefile.
 
