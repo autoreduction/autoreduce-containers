@@ -18,8 +18,8 @@ singularity:
 deps: system singularity
 
 run:
-	# The bind expects the AR repo to be at ../autoreduce, relative to this folder
-	singularity run --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
+	# The bind expects the AR repo to be at ../, relative to this folder
+	singularity run --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
 
 instance:
-	singularity instance start --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif queue_processor
+	singularity instance start --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif queue_processor
