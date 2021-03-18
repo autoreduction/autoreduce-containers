@@ -22,6 +22,12 @@ RUN apt-get install -y git libmysqlclient-dev &&\
 
 ADD ./autoreduce-containers/Mantid.user.properties /Mantid.user.properties
 
+# Disabled a warning when importing Mantid
 ENV HDF5_DISABLE_VERSION_CHECK 1
+# Specifies a custom location for the user properties, but
+# current disabled to allow easier addition of paths
+# ENV MANTIDPROPERTIES /Mantid.user.properties
 
-CMD cp /Mantid.user.properties ~/.mantid/Mantid.user.properties && python3 /autoreduce/queue_processors/queue_processor/queue_listener.py
+# Copies the user properties on start! They need to be in the HOME folder
+# but if we copy during the container build then they are NOT in the final user's home folder, but ROOT's
+CMD python3 /autoreduce/queue_processors/queue_processor/queue_listener.py
