@@ -2,7 +2,7 @@
 
 This repository contains some containers that are used to deploy different services of Autoreduction.
 
-### qp_mantid.python36.D
+### qp_mantid_python36.D
 This is a base container that installs:
 - Python 3.6 on top of a Ubuntu 18.04 (bionic) image.
 - Mantid software, which is a dependency for running reductions.
