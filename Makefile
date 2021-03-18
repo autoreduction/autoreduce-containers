@@ -1,8 +1,6 @@
 all:
-	sudo singularity build python36.sif python36.img
-	sudo singularity build mantid.sif mantid.img
-	# This build expects the AR repo to be at ../autoreduce, relative to this folder
-	sudo singularity build queue_processor.sif queue_processor.img
+	docker build -t local/python36 -f qp_mantid_python36.D ..
+	sudo singularity build -F qp_mantid_python36.sif docker-daemon://local/python36:latest
 
 system:
 	sudo yum install -y squashfs-tools
@@ -21,7 +19,7 @@ deps: system singularity
 
 run:
 	# The bind expects the AR repo to be at ../autoreduce, relative to this folder
-	singularity run --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis queue_processor.sif
+	singularity run --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
 
 instance:
-	singularity instance start --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis queue_processor.sif queue_processor
+	singularity instance start --bind ../autoreduce:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif queue_processor
