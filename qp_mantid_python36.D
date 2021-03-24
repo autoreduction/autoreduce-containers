@@ -25,9 +25,9 @@ ADD ./autoreduce-containers/Mantid.user.properties /Mantid.user.properties
 # Disabled a warning when importing Mantid
 ENV HDF5_DISABLE_VERSION_CHECK 1
 # Specifies a custom location for the user properties, but
-# current disabled to allow easier addition of paths
+# currently disabled to allow easier addition of paths.
+# This means that when run with Singularity, Mantid will look for ~/.mantid/Mantid.user.properties
+# and when run with Docker you need to specify it with -e MANTIDPROPERTIES=/Mantid.user.properties
 # ENV MANTIDPROPERTIES /Mantid.user.properties
 
-# Copies the user properties on start! They need to be in the HOME folder
-# but if we copy during the container build then they are NOT in the final user's home folder, but ROOT's
-CMD python3 /autoreduce/queue_processors/queue_processor/queue_listener.py
+CMD python3 /autoreduce/queue_processors/queue_processor/queue_listener.py &

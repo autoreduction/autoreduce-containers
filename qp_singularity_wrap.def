@@ -1,0 +1,6 @@
+Bootstrap: docker
+From: autoreduction/qp
+Includecmd: no
+
+%startscript
+    python3 /autoreduce/queue_processors/queue_processor/queue_listener.py &
