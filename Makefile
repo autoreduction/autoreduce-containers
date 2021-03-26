@@ -1,6 +1,6 @@
 all:
 	docker build -t autoreduction/qp -f qp_mantid_python36.D ..
-	sudo singularity build -F qp_mantid_python36.sif docker-daemon://autoreduction/qp:latest
+	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
 
 from-remote:
 	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def

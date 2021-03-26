@@ -22,12 +22,4 @@ RUN apt-get install -y git libmysqlclient-dev &&\
 
 ADD ./autoreduce-containers/Mantid.user.properties /Mantid.user.properties
 
-# Disabled a warning when importing Mantid
-ENV HDF5_DISABLE_VERSION_CHECK 1
-# Specifies a custom location for the user properties, but
-# currently disabled to allow easier addition of paths.
-# This means that when run with Singularity, Mantid will look for ~/.mantid/Mantid.user.properties
-# and when run with Docker you need to specify it with -e MANTIDPROPERTIES=/Mantid.user.properties
-# ENV MANTIDPROPERTIES /Mantid.user.properties
-
 CMD python3 /autoreduce/queue_processors/queue_processor/queue_listener.py &
