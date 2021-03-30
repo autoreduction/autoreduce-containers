@@ -15,7 +15,6 @@ RUN . /opt/miniconda/bin/activate &&\
 ADD ./setup.py /autoreduce/setup.py
 ADD ./build /autoreduce/build
 
-# RUN . /opt/miniconda/bin/activate mantid && python -V
 RUN . /opt/miniconda/bin/activate && conda activate mantid && python -V &&\
   python3.7 -m pip install --no-cache-dir --ignore-installed PyYAML -e autoreduce &&\
   python3.7 -m pip install --no-cache-dir mysqlclient debugpy matplotlib toml
