@@ -12,11 +12,8 @@ RUN . /opt/miniconda/bin/activate &&\
   conda create -n mantid -c conda-forge -c scipp mantid-framework python=3.7 &&\
   conda clean --all
 
-ADD ./setup.py /autoreduce/setup.py
-ADD ./build /autoreduce/build
+ADD ./qp_requirements.txt /autoreduce/qp_requirements.txt
 
 RUN . /opt/miniconda/bin/activate && conda activate mantid && python -V &&\
-  python3.7 -m pip install --no-cache-dir --ignore-installed PyYAML -e autoreduce &&\
+  python3.7 -m pip install --no-cache-dir -r /autoreduce/qp_requirements.txt &&\
   python3.7 -m pip install --no-cache-dir mysqlclient debugpy matplotlib toml
-
-CMD python3 /autoreduce/queue_processors/queue_processor/queue_listener.py &
