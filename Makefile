@@ -1,8 +1,8 @@
+VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument --bind /isis:/isis --bind /isis:/archive
+
+
 all:
 	docker build -t autoreduction/qp -f qp_mantid_python36.D ..
-	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
-
-from-remote:
 	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
 
 system:
@@ -20,15 +20,16 @@ singularity:
 
 deps: system singularity
 
+# Note: these are pretty much example commands. For the real command used in production check the Ansible configuration
 run-webapp:
 	# The bind expects the AR repo to be at ../, relative to this folder
-	singularity run --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
+	singularity run --bind $(AUTOREDUCE_LOCATION):/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
 
 run-prod-insecure:
-	sudo singularity run --env AUTOREDUCTION_PRODUCTION=true --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif python3 /autoreduce/WebApp/autoreduce_webapp/manage.py runserver 0.0.0.0:80
+	sudo singularity run --env AUTOREDUCTION_PRODUCTION=true $(VOLUME_MOUNTS) qp_mantid_python36.sif python3 /autoreduce/WebApp/autoreduce_webapp/manage.py runserver 0.0.0.0:80
 
 run-qp:
-	singularity run --env AUTOREDUCTION_PRODUCTION=true --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif
+	singularity run --env AUTOREDUCTION_PRODUCTION=true $(VOLUME_MOUNTS) qp_mantid_python36.sif
 
 instance:
-	singularity instance start --bind ../:/autoreduce/ --bind /instrument:/instrument --bind /isis:/isis qp_mantid_python36.sif queue_processor
+	singularity instance start $(VOLUME_MOUNTS) qp_mantid_python36.sif queue_processor
