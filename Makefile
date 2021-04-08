@@ -1,9 +1,15 @@
 VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument --bind /isis:/isis --bind /isis:/archive
 
 
-all:
+all: qp webapp
+
+qp:
 	docker build -t autoreduction/qp -f qp_mantid_python36.D ../autoreduce
 	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
+
+webapp:
+	docker build -t autoreduction/webapp -f webapp.D ../autoreduce
+	sudo singularity build -F webapp.sif webapp_singularity_wrap.def
 
 system:
 	sudo yum install -y squashfs-tools

@@ -1,6 +1,6 @@
 Bootstrap: docker-daemon
-From: autoreduction/qp:latest
+From: autoreduction/webapp:latest
 Includecmd: no
 
 %startscript
-    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py runserver 0.0.0.0:8000
+    cd /autoreduce/WebApp/autoreduce_webapp && gunicorn --workers 4 autoreduce_webapp.wsgi
