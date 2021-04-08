@@ -1,0 +1,6 @@
+Bootstrap: docker-daemon
+From: autoreduction/qp:latest
+Includecmd: no
+
+%startscript
+    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py runserver 0.0.0.0:8000
