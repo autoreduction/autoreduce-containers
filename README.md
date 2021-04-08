@@ -3,8 +3,11 @@
 This repository contains some containers that are used to deploy different services of Autoreduction.
 
 ## Quickstart common
-- Checkout https://github.com/isisScientificComputing/autoreduce-containers inside the autoreduce folder!
+- Checkout https://github.com/isisScientificComputing/autoreduce-containers next to the autoreduce folder!
+  - So that you can do `cd ../autoreduce` from the containers folder
 - Either after or while that's happening you will have to copy the Mantid.user.properties to ~/.mantid/Mantid.user.properties
+- Install Docker, this should be enough for development
+- Install Singularity, if you need to build the production images
 
 ## Quickstart with Docker & Singularity
 Run `make`, then `make run`. This is used for production deployment as Singularity enforces running as a user, rather than `root`.
@@ -14,7 +17,8 @@ Run `make`, then wait until the error that you don't have singularity executable
 
 Then run it with the command below, but make sure to change `~/dev/autoreduce/` to wherever your autoreduce folder is.
 ```
-docker run --network=host -v ~/dev/autoreduce/:/autoreduce -v /isis:/isis -it local/python36:latest```
+docker run --network=host -v ~/dev/autoreduce/:/autoreduce -v /isis:/isis -it local/python36:latest
+```
 
 This should not be used in production to avoid running as root.
 
