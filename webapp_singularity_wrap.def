@@ -3,4 +3,4 @@ From: autoreduction/webapp:latest
 Includecmd: no
 
 %startscript
-    cd /autoreduce/WebApp/autoreduce_webapp && gunicorn --workers 4 autoreduce_webapp.wsgi
+    cd /autoreduce/WebApp/autoreduce_webapp && gunicorn --workers 4 -b 0.0.0.0:8000 autoreduce_webapp.wsgi
