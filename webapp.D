@@ -1,3 +1,3 @@
 from autoreduction/qp
 
-RUN python3 -m pip install gunicorn whitenoise
+RUN python3 -m pip install gunicorn
