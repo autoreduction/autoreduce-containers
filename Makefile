@@ -11,8 +11,8 @@ webapp:
 	docker build -t autoreduction/webapp -f webapp.D ../autoreduce
 	sudo singularity build -F webapp.sif webapp_singularity_wrap.def
 
-dbbackup: base
-	sudo singularity build -F dbbackup.sif dbbackup.def
+dbmanage: base
+	sudo singularity build -F dbmanage.sif dbmanage.def
 
 base:
 	docker build -t autoreduction/base -f autoreduce_base.D ../autoreduce
