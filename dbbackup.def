@@ -1,0 +1,21 @@
+Bootstrap: docker-daemon
+From: autoreduction/base:latest
+Includecmd: no
+
+%environment
+    # create a format of ENGINE_NAME to prefix the output filename with
+    export DB_FILENAME_PREFIX=`python3 /autoreduce/WebApp/autoreduce_webapp/manage.py shell -c \
+           "import os; from django.db import connection; print(connection.settings_dict['ENGINE'], os.path.basename(connection.settings_dict['NAME']),sep='_')"`
+
+%apprun backup
+    [ -z "$AUTOREDUCE_DB_PASSPHRASE" ] && echo "Provide AUTOREDUCE_DB_PASSPHRASE value with --env AUTOREDUCE_DB_PASSPHRASE=" && exit 1
+    name=backup_$(date --utc -I'seconds')_"$DB_FILENAME_PREFIX".json
+    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission > $name
+    echo Encrypting "$name"
+    gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes -c $name
+    echo Saved "$name.gpg" and removing unencrypted file
+    rm $name
+
+%apprun restore
+    gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes "$@"
+    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py loaddata "${@%.*}"
