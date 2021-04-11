@@ -98,5 +98,5 @@ singularity run [--env AUTOREDUCTION_PRODUCTION=1] --env AUTOREDUCE_DB_PASSPHRAS
 singularity run --env AUTOREDUCE_DB_PASSPHRASE=apples --bind ../autoreduce:/autoreduce/ --app restore dbmanage.sif backup_2021-04-11T07:33:31+00:00_django.db.backends.mysql_autoreduction.json.gpg
 ```
 
-Note: A backup with `AUTOREDUCTION_PRODUCTION=1` can be restored anywhere after migrating an empty database (i.e. local SQLite3.db) and then restoring into it.
-
+Note: A backup with `AUTOREDUCTION_PRODUCTION=1` can be restored on any database with the same migrations (i.e. local SQLite3.db).
+This is best done on an empty database, or you might get some unique constraint errors (e.g. if Experiment ID already exists).
