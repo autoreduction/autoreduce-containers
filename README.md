@@ -53,15 +53,50 @@ installed, and the Autoreduce repo is at `../`, relative to this repository (thi
 Required: Passphrase, dbmanage.sif image
 
 The dbmanage.sif image contains 2 apps within it: backup and restore. They both use Django to do the DB operations.
+
 ### Backup
-Example command:
+Example:
+
 ```
+singularity run [--env AUTOREDUCTION_PRODUCTION=1] --env AUTOREDUCE_DB_PASSPHRASE=[PASSPRHASE] --bind ../autoreduce:/autoreduce/ --app backup dbmanage.sif
+
+# Note: only add --env AUTOREDUCTION_PRODUCTION=1 if targeting the production DB (or another remote DB that isn't SQLite3)
 singularity run --env AUTOREDUCTION_PRODUCTION=1 --env AUTOREDUCE_DB_PASSPHRASE=apples --bind ../autoreduce:/autoreduce/ --app backup dbmanage.sif
 ```
 
 The backup will run a `python manage.py dumpdata` on the current Django database. To target production make sure you have added `--env AUTOREDUCTION_PRODUCTION=1` to the singularity run.
 
+The output file is encrypted with the passphrase after the `dumpdata` command, and the name will be something starting with `backup` and ending in `.gpg`.
+
+The general pattern of the name is: `backup_DATE_DBENGINE_DBNAME.json.gpg`. For the naming generation check the `dbmanage.def` `%apprun backup` section. A breakdown:
+
+```
+backup_2021-04-11T07:33:31+00:00_django.db.backends.mysql_autoreduction.json.gpg
+
+`backup` - all files start with this, mostly for easy tab-completion
+
+`2021-04-11T07:33:31+00:00` - timestamp of when the backup was made
+
+`django.db.backends.mysql` - engine of the DB
+
+`autoreduction` - name of the DB
+
+`.json` - format of the unencrypted data dump
+
+`.gpg` - shows that file was encrypted with gpg
+```
+
 
 ### Restore
 
-### Automatic Backups
+Example:
+
+```
+singularity run [--env AUTOREDUCTION_PRODUCTION=1] --env AUTOREDUCE_DB_PASSPHRASE=[PASSPRHASE] --bind ../autoreduce:/autoreduce/ --app restore dbmanage.sif [ENCRYPTED FILE]
+
+# Note: this example command will restore the production data in a local SQLite3 DB!
+singularity run --env AUTOREDUCE_DB_PASSPHRASE=apples --bind ../autoreduce:/autoreduce/ --app restore dbmanage.sif backup_2021-04-11T07:33:31+00:00_django.db.backends.mysql_autoreduction.json.gpg
+```
+
+Note: A backup with `AUTOREDUCTION_PRODUCTION=1` can be restored anywhere after migrating an empty database (i.e. local SQLite3.db) and then restoring into it.
+
