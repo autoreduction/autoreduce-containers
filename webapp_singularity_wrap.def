@@ -1,4 +1,4 @@
-#######################################
+###########################################################################################################################
 #
 # This containerises the Web App server
 #
@@ -13,7 +13,7 @@
 # - /staticfiles - the folder where the staticfiles will be collected, e.g. --bind /staticfiles/:/staticfiles
 #                  for development the default dir is --bind ./autoreduce/WebApp/autoreduce_webapp/staticfiles:/staticfiles
 #
-########################################
+###########################################################################################################################
 
 Bootstrap: docker-daemon
 From: autoreduction/webapp:latest
