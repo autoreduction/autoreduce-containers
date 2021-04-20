@@ -1,4 +1,4 @@
-###
+########################################################################
 # Example usage
 #
 # To create backup
@@ -7,7 +7,7 @@
 # To restore backup - the last parameter is the encrypted file produced by --app backup
 # singularity run --env AUTOREDUCTION_PRODUCTION=1 --env AUTOREDUCE_DB_PASSPHRASE=apples --bind ../autoreduce:/autoreduce/ --app restore dbmanage.sif backup_2021-04-10T16:16:59+00:00_django.db.backends.sqlite3_sqlite3.db.json.gpg
 #
-###
+########################################################################
 
 
 Bootstrap: docker-daemon
