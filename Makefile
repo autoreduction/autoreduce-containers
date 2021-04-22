@@ -1,7 +1,7 @@
 VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument --bind /isis:/isis --bind /isis:/archive
 
 
-all: base qp webapp dbmanage
+all: base qp webapp dbmanage devtest
 
 qp: base
 	docker build -t autoreduction/qp -f qp_mantid_python36.D ../autoreduce
@@ -16,6 +16,9 @@ dbmanage: base
 
 base:
 	docker build -t autoreduction/base -f autoreduce_base.D ../autoreduce
+
+devtest:
+	docker build -t autoreduction/devtest -f devtest.D ../autoreduce
 
 system:
 	sudo yum install -y squashfs-tools
