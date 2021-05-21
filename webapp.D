@@ -1,5 +1,7 @@
-from autoreduction/base
+FROM autoreduction/base
 
-RUN python3 -m pip install gunicorn
+ADD ./setup.py /autoreduce/setup.py
 
-CMD python3 /autoreduce/WebApp/autoreduce_webapp/manage.py runserver 8000
+RUN python3 -m pip install --no-cache-dir gunicorn && python3 -m pip install --no-cache-dir -e /autoreduce
+
+CMD python3 /autoreduce/autoreduce_webapp/manage.py migrate && python3 /autoreduce/autoreduce_webapp/manage.py runserver 8000

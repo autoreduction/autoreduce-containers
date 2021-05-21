@@ -22,7 +22,7 @@ Includecmd: no
 
     name=backup_$(date --utc -I'seconds')_"$DB_FILENAME_PREFIX".json
     echo Output file will be "$name"
-    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission > $name
+    python3 /autoreduce/autoreduce_webapp/manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission > $name
 
     echo Encrypting "$name"
     gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes -c $name
@@ -33,4 +33,4 @@ Includecmd: no
 %apprun restore
     gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes "$@"
     # %.* removes the last extension - which should be .gpg
-    python3 /autoreduce/WebApp/autoreduce_webapp/manage.py loaddata "${@%.*}"
+    python3 /autoreduce/autoreduce_webapp/manage.py loaddata "${@%.*}"
