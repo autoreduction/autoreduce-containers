@@ -21,5 +21,5 @@ Includecmd: no
 
 %startscript
     cd /autoreduce-frontend/autoreduce_webapp
-    python3 manage.py collectstatic --no-input
-    gunicorn --workers 4 -b 0.0.0.0:8000 autoreduce_webapp.wsgi
+    autoreduce-webapp-manage collectstatic --no-input
+    gunicorn --workers 4 -b 0.0.0.0:8000 autoreduce_webapp.autoreduce_django.wsgi
