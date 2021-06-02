@@ -1,4 +1,4 @@
-FROM autoreduction/base
+FROM autoreduction/qp
 
 ADD ./autoreduce/ /autoreduce/
 ADD ./autoreduce-frontend/ /autoreduce-frontend/
