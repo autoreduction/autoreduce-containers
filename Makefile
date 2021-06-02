@@ -3,6 +3,9 @@ VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument -
 
 all: base qp webapp dbmanage devtest
 
+dev:
+	docker build .. -f development.D -t autoreduction/dev
+
 qp: base
 	docker build -t autoreduction/qp -f qp_mantid_python36.D ../autoreduce
 	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
