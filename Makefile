@@ -20,9 +20,6 @@ dbmanage: base
 base:
 	docker build -t autoreduction/base -f autoreduce_base.D ../autoreduce
 
-devtest:
-	docker build -t autoreduction/devtest -f devtest.D ../autoreduce
-
 system:
 	sudo yum install -y squashfs-tools
 	wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
