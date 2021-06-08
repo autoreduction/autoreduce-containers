@@ -12,7 +12,7 @@ From: autoreduction/base:latest
 Includecmd: no
 
 %post
-    python3 -m pip install autoreduce_scripts
+    python3 -m pip install autoreduce_scripts==22.0.0.dev4
 
 %apprun time_since_last_run
     autoreduce-check-time-since-last-run
