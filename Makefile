@@ -17,6 +17,9 @@ webapp:
 dbmanage: base
 	sudo singularity build -F dbmanage.sif dbmanage.def
 
+monitoring-checks:
+	sudo singularity build -F monitoring-checks.sif monitoring-checks.def
+
 base:
 	docker build -t autoreduction/base -f autoreduce_base.D ../autoreduce
 

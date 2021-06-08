@@ -1,0 +1,18 @@
+########################################################################
+# Example usage
+#
+# To run the time_since_last_run checks
+# singularity run --env AUTOREDUCTION_PRODUCTION=1 --app time_since_last_run monitoring-checks.sif
+#
+########################################################################
+
+
+Bootstrap: docker-daemon
+From: autoreduction/base:latest
+Includecmd: no
+
+%post
+    python3 -m pip install autoreduce_scripts
+
+%apprun time_since_last_run
+    autoreduce-check-time-since-last-run
