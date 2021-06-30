@@ -14,7 +14,7 @@ Run `make`, then wait until the error that you don't have singularity executable
 
 Then run it with the command below, but make sure to change `~/dev/autoreduce/` to wherever your autoreduce folder is.
 ```
-docker run --network=host -v ~/dev/autoreduce/:/autoreduce -v /isis:/isis -it autoreduce/qp:latest
+docker run --network=host -v ~/dev/autoreduce/:/autoreduce -v /isis:/isis -it autoreduction/qp:latest
 ```
 
 You can check the `.def` files to get an idea of what commands the Singularity containers execute on startup.
