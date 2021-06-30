@@ -3,11 +3,12 @@
 This repository contains some containers that are used to deploy different services of Autoreduction.
 
 ## Quickstart common
-- Checkout https://github.com/isisScientificComputing/autoreduce-containers next to the autoreduce folder!
-  - So that you can do `cd ../autoreduce` from the containers folder
+- If you haven't the code, see the [start here section](https://github.com/ISISScientificComputing/autoreduce/wiki/Start-here-(getting-the-code---installation)#getting-the-code)
 - Either after or while that's happening you will have to copy the Mantid.user.properties to ~/.mantid/Mantid.user.properties
+  - This provides search paths for Mantid to find data from the Archive in specific locations
 - Install Docker, this should be enough for development
 - Install Singularity, if you need to build the production images. There are example commands in the Makefile, but it's best to refer to the official documentation https://sylabs.io/docs/
+  - You might also need to run Singularity if you are experiencing issues with Docker, such as failing to mount `/isis` inside the container. An alternative solution is to mount a local folder 
 
 ## Quickstart with Docker only
 Run `make`, then wait until the error that you don't have singularity executable, this is fine as we will run it through Docker only.
@@ -24,18 +25,12 @@ You can check the `.def` files to get an idea of what commands the Singularity c
 Locally, it is more convenient to run in Docker, because it lets you modify the image after build (the Singularity one is made immutable),
 although you may find yourself in need of running a few `chown`s to access some output files, as they will be owned by `root` by default.
 
-## Production quickstart with Docker & Singularity
-Run `make deps` (which will install Singularity), then `make` (build all containers).
+## Preparing images for production with Docker & Singularity
+1. Install Docker & Singularity - `make deps` attempts to simplify this, but the instructions may go out of date in the future
+2. Build the images locally with the relevant `make` command. The Singularity image is built locally as part of this step.
+3. Run the relevant [Ansible playbook](https://github.com/ISISScientificComputing/ansible). This will copy & run the Singularity image on the hosts.
 
-This is used for production deployment as Singularity enforces running as a user, rather than `root`.
-
-Then run the Ansible playbooks - they copy over the images and run them.
-
-### qp_mantid_python36.D
-This is the container definition file and it installs:
-- Python 3.6 on top of a Ubuntu 18.04 (bionic) image.
-- Mantid software, which is a dependency for running reductions.
-- Autoreduce and configures the run script that can be used to start the service.
+Singularity is used as production runtime as it enforces running as a user, rather than `root`.
 
 ### Binding paths
 There are a few folders that need to be mounted:
