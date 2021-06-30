@@ -2,6 +2,8 @@
 
 This repository contains some containers that are used to deploy different services of Autoreduction.
 
+The containers and `ansible` roles for the [autoreduce-frontend](https://github.com/ISISScientificComputing/autoreduce-frontend) and [autoreduce-qp](https://github.com/ISISScientificComputing/autoreduce) are stored in their repositories. This repository contains the container build files that are not tied to a specific part of the service.
+
 ## Quickstart common
 - If you haven't the code, see the [start here section](https://github.com/ISISScientificComputing/autoreduce/wiki/Start-here-(getting-the-code---installation)#getting-the-code)
 - Either after or while that's happening you will have to copy the Mantid.user.properties to ~/.mantid/Mantid.user.properties
