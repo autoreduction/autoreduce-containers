@@ -7,11 +7,11 @@ dev:
 	docker build .. -f development.D -t autoreduction/dev
 
 qp: base
-	docker build -t autoreduction/qp -f qp_mantid_python36.D ../autoreduce
+	docker build -t autoreduction/qp -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
 	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
 
 webapp:
-	docker build -t autoreduction/webapp -f webapp.D ../autoreduce-frontend
+	docker build -t autoreduction/webapp -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
 	sudo singularity build -F webapp.sif webapp_singularity_wrap.def
 
 dbmanage: base
