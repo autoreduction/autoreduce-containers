@@ -8,11 +8,15 @@ dev:
 
 qp: base
 	docker build -t autoreduction/qp -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
-	sudo singularity build -F qp_mantid_python36.sif qp_singularity_wrap.def
+	sudo singularity build -F qp_mantid_python36.sif ../autoreduce/container/qp_singularity_wrap.def
 
 webapp:
 	docker build -t autoreduction/webapp -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
-	sudo singularity build -F webapp.sif webapp_singularity_wrap.def
+	sudo singularity build -F webapp.sif ../autoreduce-frontend/container/webapp_singularity_wrap.def
+
+rest-api:
+	docker build -t autoreduction/rest-api -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api
+	sudo singularity build -F rest-api.sif ../autoreduce-rest-api/container/rest-api-singularity-wrap.def
 
 dbmanage: base
 	sudo singularity build -F dbmanage.sif dbmanage.def

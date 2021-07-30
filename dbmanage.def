@@ -11,18 +11,18 @@
 
 
 Bootstrap: docker-daemon
-From: autoreduction/base:latest
+From: autoreduction/webapp:latest
 Includecmd: no
 
 %apprun backup
     [ -z "$AUTOREDUCE_DB_PASSPHRASE" ] && echo "Provide AUTOREDUCE_DB_PASSPHRASE value with --env AUTOREDUCE_DB_PASSPHRASE=" && exit 1
 
-    DB_FILENAME_PREFIX=`python3 /autoreduce/WebApp/autoreduce_webapp/manage.py shell -c \
+    DB_FILENAME_PREFIX=`autoreduce-webapp-manage shell -c \
            "import os; from django.db import connection; print(connection.settings_dict['ENGINE'], os.path.basename(connection.settings_dict['NAME']),sep='_')"`
 
     name=backup_$(date --utc -I'seconds')_"$DB_FILENAME_PREFIX".json
     echo Output file will be "$name"
-    python3 /autoreduce/autoreduce_webapp/manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission > $name
+    autoreduce-webapp-manage dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission > $name
 
     echo Encrypting "$name"
     gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes -c $name
@@ -33,4 +33,4 @@ Includecmd: no
 %apprun restore
     gpg --passphrase $AUTOREDUCE_DB_PASSPHRASE --quiet --batch --yes "$@"
     # %.* removes the last extension - which should be .gpg
-    python3 /autoreduce/autoreduce_webapp/manage.py loaddata "${@%.*}"
+    autoreduce-webapp-manage loaddata "${@%.*}"
