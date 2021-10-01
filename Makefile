@@ -1,21 +1,25 @@
 VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument --bind /isis:/isis --bind /isis:/archive
 
+DATE_LABEL := $(shell date +%Y-%m-%dT%H%M)
 
 all: base qp webapp dbmanage devtest
 
 dev:
-	docker build .. -f development.D -t autoreduction/dev
+	docker build . -f development.D -t autoreduction/dev
 
 qp: base
-	docker build -t autoreduction/qp -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
+	docker build -t autoreduction/qp:$(DATE_LABEL) -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
+	docker tag autoreduction/qp:$(DATE_LABEL) autoreduction/qp:latest
 	sudo singularity build -F qp_mantid_python36.sif ../autoreduce/container/qp_singularity_wrap.def
 
 webapp:
-	docker build -t autoreduction/webapp -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
+	docker build -t autoreduction/webapp:$(DATE_LABEL) -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
+	docker tag autoreduction/webapp:$(DATE_LABEL) autoreduction/webapp:latest
 	sudo singularity build -F webapp.sif ../autoreduce-frontend/container/webapp_singularity_wrap.def
 
 rest-api:
-	docker build -t autoreduction/rest-api -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api
+	docker build -t autoreduction/rest-api:$(DATE_LABEL) -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api
+	docker tag autoreduction/rest-api:$(DATE_LABEL) autoreduction/rest-api:latest
 	sudo singularity build -F rest-api.sif ../autoreduce-rest-api/container/rest-api-singularity-wrap.def
 
 dbmanage: base
