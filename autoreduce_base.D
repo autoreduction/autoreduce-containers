@@ -9,6 +9,5 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update &&\
 
 ADD ./setup.py /autoreduce/setup.py
 
-# Install Autoreduce and reinstall h5py to have the correct version that Mantid depends on
-# Note: libmysqlclient-dev & mysqlclient are required when connecting to the production DB
+# Note: mysqlclient is required when connecting to the production DB
 RUN python3 -m pip install --no-cache-dir mysqlclient debugpy
