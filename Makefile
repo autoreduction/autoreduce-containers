@@ -10,7 +10,8 @@ dev:
 qp: base
 	docker build -t autoreduction/qp:$(DATE_LABEL) -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
 	docker tag autoreduction/qp:$(DATE_LABEL) autoreduction/qp:latest
-	sudo singularity build -F qp_mantid_python36.sif ../autoreduce/container/qp_singularity_wrap.def
+	sudo docker push autoreduction/qp:$(DATE_LABEL)
+	sudo docker push autoreduction/qp:latest
 
 webapp:
 	docker build -t autoreduction/webapp:$(DATE_LABEL) -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
