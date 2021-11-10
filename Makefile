@@ -15,7 +15,8 @@ qp: base
 webapp:
 	docker build -t autoreduction/webapp:$(DATE_LABEL) -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
 	docker tag autoreduction/webapp:$(DATE_LABEL) autoreduction/webapp:latest
-	sudo singularity build -F webapp.sif ../autoreduce-frontend/container/webapp_singularity_wrap.def
+	sudo docker push autoreduction/webapp:$(DATE_LABEL)
+	sudo docker push autoreduction/webapp:latest
 
 rest-api:
 	docker build -t autoreduction/rest-api:$(DATE_LABEL) -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api

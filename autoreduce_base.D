@@ -7,7 +7,15 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update &&\
   python3.6 -m pip install --upgrade pip &&\
   apt-get clean
 
-ADD ./setup.py /autoreduce/setup.py
+# --no-log-init needed when a user with large UID is created
+# ref: https://github.com/moby/moby/issues/5419#issuecomment-41478290
+# note: this user ID shouldn't be changed as it's expected by the rest of the system
+RUN useradd -m --no-log-init -s /bin/bash -u 880844730 isisautoreduce
+USER isisautoreduce
+WORKDIR /home/isisautoreduce
+
+# .local/bin is where local pip packages put their executables
+ENV PATH=/home/isisautoreduce/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Note: mysqlclient is required when connecting to the production DB
-RUN python3 -m pip install --no-cache-dir mysqlclient debugpy
+RUN python3 -m pip install --user --no-cache-dir mysqlclient debugpy
