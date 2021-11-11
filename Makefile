@@ -2,27 +2,30 @@ VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument -
 
 DATE_LABEL := $(shell date +%Y-%m-%dT%H%M)
 
+GHCR=ghcr.io/isisscientificcomputing
+
 all: base qp webapp dbmanage devtest
 
 dev:
 	docker build . -f development.D -t autoreduction/dev
 
 qp: base
-	sudo docker build -t autoreduction/qp:$(DATE_LABEL) -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
-	sudo docker tag autoreduction/qp:$(DATE_LABEL) autoreduction/qp:latest
-	sudo docker push autoreduction/qp:$(DATE_LABEL)
-	sudo docker push autoreduction/qp:latest
+	sudo docker build -t $(GHCR)/autoreduce:$(DATE_LABEL) -f ../autoreduce/container/qp_mantid_python36.D ../autoreduce
+	sudo docker tag $(GHCR)/autoreduce:$(DATE_LABEL) $(GHCR)/autoreduce:latest
+	sudo docker push $(GHCR)/autoreduce:$(DATE_LABEL)
+	sudo docker push $(GHCR)/autoreduce:latest
 
 webapp:
-	sudo docker build -t autoreduction/webapp:$(DATE_LABEL) -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
-	sudo docker tag autoreduction/webapp:$(DATE_LABEL) autoreduction/webapp:latest
-	sudo docker push autoreduction/webapp:$(DATE_LABEL)
-	sudo docker push autoreduction/webapp:latest
+	sudo docker build -t $(GHCR)/autoreduce-frontend:$(DATE_LABEL) -f ../autoreduce-frontend/container/webapp.D ../autoreduce-frontend
+	sudo docker tag $(GHCR)/autoreduce-frontend:$(DATE_LABEL) $(GHCR)/autoreduce-frontend:latest
+	sudo docker push $(GHCR)/autoreduce-frontend:$(DATE_LABEL)
+	sudo docker push $(GHCR)/autoreduce-frontend:latest
 
 rest-api:
-	docker build -t autoreduction/rest-api:$(DATE_LABEL) -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api
-	docker tag autoreduction/rest-api:$(DATE_LABEL) autoreduction/rest-api:latest
-	sudo singularity build -F rest-api.sif ../autoreduce-rest-api/container/rest-api-singularity-wrap.def
+	sudo docker build -t $(GHCR)/autoreduce-rest-api:$(DATE_LABEL) -f ../autoreduce-rest-api/container/rest-api.D ../autoreduce-rest-api
+	sudo docker tag $(GHCR)/autoreduce-rest-api:$(DATE_LABEL) $(GHCR)/autoreduce-rest-api:latest
+	sudo docker push $(GHCR)/autoreduce-rest-api:$(DATE_LABEL)
+	sudo docker push $(GHCR)/autoreduce-rest-api:latest
 
 dbmanage: base
 	sudo singularity build -F dbmanage.sif dbmanage.def
@@ -31,19 +34,5 @@ monitoring-checks:
 	sudo singularity build -F monitoring-checks.sif monitoring-checks.def
 
 base:
-	docker build -t autoreduction/base -f autoreduce_base.D ../autoreduce
-
-system:
-	sudo yum install -y squashfs-tools
-	wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
-	sudo tar -C /usr/local -xzf go1.16.2.linux-amd64.tar.gz
-	sudo ln -s /usr/local/go/bin/go /usr/bin/go
-	sudo ln -s /usr/local/go/bin/gofmt /usr/bin/gofmt
-	sudo yum groupinstall -y 'Development Tools'
-
-singularity:
-	export VERSION=3.7.0 && wget https://github.com/hpcng/singularity/releases/download/v$${VERSION}/singularity-$${VERSION}.tar.gz && tar -xzf singularity-$${VERSION}.tar.gz
-	cd singularity && ./mconfig && make -C builddir && sudo make -C builddir install
-	sudo ln -s /usr/local/bin/singularity /usr/bin/singularity
-
-deps: system singularity
+	docker build -t $(GHCR)/base -f autoreduce_base.D ../autoreduce
+	sudo docker push $(GHCR)/base
