@@ -1,4 +1,4 @@
-FROM ghcr.io/isisscientificsoftware/autoreduce
+FROM ghcr.io/isisscientificcomputing/autoreduce
 
 VOLUME /ar
 
