@@ -1,4 +1,4 @@
-FROM autoreduction/base
+FROM ghcr.io/isisscientificcomputing/base
 
 ENV PYTHONIOENCODING=UTF-8
 ENV LC_CTYPE="en_US.UTF-8"
