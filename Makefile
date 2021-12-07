@@ -2,7 +2,7 @@ VOLUME_MOUNTS= --bind ../autoreduce:/autoreduce --bind /instrument:/instrument -
 
 DATE_LABEL := $(shell date +%Y-%m-%dT%H%M)
 
-GHCR=ghcr.io/isisscientificcomputing
+GHCR=ghcr.io/autoreduction
 
 all: base qp webapp dbmanage devtest
 
@@ -27,6 +27,12 @@ rest-api:
 	sudo docker push $(GHCR)/autoreduce-rest-api:$(DATE_LABEL)
 	sudo docker push $(GHCR)/autoreduce-rest-api:latest
 
+run-detection:
+	sudo docker build -t $(GHCR)/autoreduce-run-detection:$(DATE_LABEL) -f ../autoreduce-run-detection/container/run-detection.D ../autoreduce-run-detection
+	sudo docker tag $(GHCR)/autoreduce-run-detection:$(DATE_LABEL) $(GHCR)/autoreduce-run-detection:latest
+	sudo docker push $(GHCR)/autoreduce-run-detection:$(DATE_LABEL)
+	sudo docker push $(GHCR)/autoreduce-run-detection:latest
+
 dbmanage: base
 	sudo singularity build -F dbmanage.sif dbmanage.def
 
@@ -34,5 +40,5 @@ monitoring-checks:
 	sudo singularity build -F monitoring-checks.sif monitoring-checks.def
 
 base:
-	docker build -t $(GHCR)/base -f autoreduce_base.D ../autoreduce
+	sudo docker build -t $(GHCR)/base -f autoreduce_base.D ../autoreduce
 	sudo docker push $(GHCR)/base

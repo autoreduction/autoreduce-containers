@@ -2,15 +2,15 @@
 
 This repository contains some containers that are used to deploy different services of Autoreduction.
 
-The containers and `ansible` roles for the [autoreduce-frontend](https://github.com/ISISScientificComputing/autoreduce-frontend) and [autoreduce-qp](https://github.com/ISISScientificComputing/autoreduce) are stored in their repositories. This repository contains the container build files that are not tied to a specific part of the service.
+The containers and `ansible` roles for the [autoreduce-frontend](https://github.com/autoreduction/autoreduce-frontend) and [autoreduce-qp](https://github.com/autoreduction/autoreduce) are stored in their repositories. This repository contains the container build files that are not tied to a specific part of the service.
 
 ## Quickstart common
-- If you haven't the code, see the [start here section](https://github.com/ISISScientificComputing/autoreduce/wiki/Start-here-(getting-the-code---installation)#getting-the-code)
+- If you haven't the code, see the [start here section](https://github.com/autoreduction/autoreduce/wiki/Start-here-(getting-the-code---installation)#getting-the-code)
 - Either after or while that's happening you will have to copy the Mantid.user.properties to ~/.mantid/Mantid.user.properties
   - This provides search paths for Mantid to find data from the Archive in specific locations
 - Install Docker, this should be enough for development
 - Install Singularity, if you need to build the production images. There are example commands in the Makefile, but it's best to refer to the official documentation https://sylabs.io/docs/
-  - You might also need to run Singularity if you are experiencing issues with Docker, such as failing to mount `/isis` inside the container. An alternative solution is to mount a local folder 
+  - You might also need to run Singularity if you are experiencing issues with Docker, such as failing to mount `/isis` inside the container. An alternative solution is to mount a local folder
 
 ## Quickstart with Docker only
 Run `make`, then wait until the error that you don't have singularity executable, this is fine as we will run it through Docker only.
@@ -30,7 +30,7 @@ although you may find yourself in need of running a few `chown`s to access some 
 ## Preparing images for production with Docker & Singularity
 1. Install Docker & Singularity - `make deps` attempts to simplify this, but the instructions may go out of date in the future
 2. Build the images locally with the relevant `make` command. The Singularity image is built locally as part of this step.
-3. Run the relevant [Ansible playbook](https://github.com/ISISScientificComputing/ansible). This will copy & run the Singularity image on the hosts.
+3. Run the relevant [Ansible playbook](https://github.com/autoreduction/ansible). This will copy & run the Singularity image on the hosts.
 
 Singularity is used as production runtime as it enforces running as a user, rather than `root`.
 
