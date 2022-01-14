@@ -15,7 +15,7 @@ qp: base
 	sudo docker push $(GHCR)/autoreduce:$(DATE_LABEL)
 	sudo docker push $(GHCR)/autoreduce:latest
 
-mantid_6.2: base
+mantid_6.2: qp
 	sudo docker build -t $(GHCR)/runner-mantid:$(DATE_LABEL) -f ./Dockerfile ../autoreduce
 	sudo docker tag $(GHCR)/runner-mantid:$(DATE_LABEL) $(GHCR)/runner-mantid:6.2.0
 	sudo docker push $(GHCR)/runner-mantid:$(DATE_LABEL)
