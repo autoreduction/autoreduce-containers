@@ -4,7 +4,7 @@ DATE_LABEL := $(shell date +%Y-%m-%dT%H%M)
 
 GHCR=ghcr.io/autoreduction
 
-all: base qp webapp dbmanage devtest
+all: base qp mantid_6.2 mantid_6.1 webapp dbmanage devtest
 
 dev:
 	docker build . -f development.D -t autoreduction/dev
