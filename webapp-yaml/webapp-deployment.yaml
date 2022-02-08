@@ -6,7 +6,7 @@ metadata:
     app: webapp
 spec:
   # How many copies of each pod do we want?
-	replicas: 2
+  replicas: 2
   # Which pods are managed by this deployment?
   selector:
     # This must match the labels we set on the pod!
@@ -21,7 +21,10 @@ spec:
     spec:
       containers:
         - name: webapp
+          # TODO: Use fixed tag
           image: ghcr.io/autoreduction/autoreduce-frontend:latest
+          securityContext:
+            readOnlyRootFilesystem: true
           envFrom:
           - secretRef:
               name: webapp-secrets
@@ -30,14 +33,14 @@ spec:
           ports:
             - containerPort: 8000
               name: gunicorn
-          # Create livenessProbe to check if the pod is alive
-          livenessProbe:
+          # Create readinessProbe to check if the pod is alive
+          readinessProbe:
             httpGet:
               path: /
               port: 8000
-            initialDelaySeconds: 30
+            initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 1
 
         - name: nginx-sidecar
           image: nginx:stable
@@ -47,6 +50,7 @@ spec:
             # Nginx must start as root to bind the proper port in the container.
             allowPrivilegeEscalation: true
             runAsNonRoot: false
+            readOnlyRootFilesystem: true
           ports:
             - name: http
               containerPort: 80
@@ -58,13 +62,6 @@ spec:
             - name: staticfiles
               mountPath: /var/www/api/
               readOnly: true
-          livenessProbe:
-            httpGet:
-              # When we can access this route, nginx is alive, but it is not ready (ie cannot serve
-              # traffic yet).
-              path: /
-              port: 80
-            timeoutSeconds: 1
           readinessProbe:
             httpGet:
               # The container cannot be ready (that is accepting traffic) until it can talk to the
@@ -73,7 +70,7 @@ spec:
               # Since it can take a few seconds, we have an initialDelaySeconds.
               path: /
               port: 80
-            initialDelaySeconds: 10
+            initialDelaySeconds: 5
             timeoutSeconds: 1
   # Volume mounts for the nginx sidecar.
   volumes:
