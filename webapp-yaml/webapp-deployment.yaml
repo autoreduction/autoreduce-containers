@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoreduce-frontend-deployment
+  labels:
+    app: webapp
+spec:
+  # How many copies of each pod do we want?
+	replicas: 2
+  # Which pods are managed by this deployment?
+  selector:
+    # This must match the labels we set on the pod!
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      # Set labels on the pod.
+      # This is used in the deployment selector.
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: ghcr.io/autoreduction/autoreduce-frontend:latest
+          envFrom:
+          - secretRef:
+              name: webapp-secrets
+          - configMapRef:
+              name: webapp-config
+          ports:
+            - containerPort: 8000
+              name: gunicorn
+          # Create livenessProbe to check if the pod is alive
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+
+        - name: nginx-sidecar
+          image: nginx:stable
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+            # Nginx must start as root to bind the proper port in the container.
+            allowPrivilegeEscalation: true
+            runAsNonRoot: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+            - name: staticfiles
+              mountPath: /var/www/api/
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              # When we can access this route, nginx is alive, but it is not ready (ie cannot serve
+              # traffic yet).
+              path: /
+              port: 80
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              # The container cannot be ready (that is accepting traffic) until it can talk to the
+              # container. So we need to pass through nginx (with the port) to the container (with
+              # the path) to check this.
+              # Since it can take a few seconds, we have an initialDelaySeconds.
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+  # Volume mounts for the nginx sidecar.
+  volumes:
+    - name: nginx-conf
+      configMap:
+        name: backend-api-nginx
