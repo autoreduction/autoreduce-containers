@@ -1,13 +1,14 @@
-FROM ubuntu:bionic
+# Don't use alpine based images: Python was designed for glibc and is very slow in them.
+# Always use the -slim images if you can: they are the best compromise between performance and image size.
+FROM python:3.8.12-slim
+
+# This is to print directly to stdout instead of buffering output
+ENV PYTHONUNBUFFERED 1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update &&\
-  apt-get install -y wget gnupg git software-properties-common libmysqlclient-dev &&\
-  wget -O - http://apt.isis.rl.ac.uk/2E10C193726B7213.asc | apt-key add - &&\
-  apt-get install -y python3.6 python3-pip &&\
-  python3.6 -m pip install --upgrade pip &&\
-  apt-get clean
+    apt-get install -y wget gnupg git software-properties-common python3-dev default-libmysqlclient-dev build-essential
 
-# --no-log-init needed when a user with large UID is created
+# Create non-root user and configure it for the project to run correctly with it.
 # ref: https://github.com/moby/moby/issues/5419#issuecomment-41478290
 # note: this user ID shouldn't be changed as it's expected by the rest of the system
 RUN useradd -m --no-log-init -s /bin/bash -u 880844730 isisautoreduce
