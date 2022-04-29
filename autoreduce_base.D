@@ -6,7 +6,14 @@ FROM python:3.8.12-slim
 ENV PYTHONUNBUFFERED 1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update &&\
-    apt-get install -y wget gnupg git software-properties-common python3-dev default-libmysqlclient-dev build-essential
+    apt-get install -y \
+      wget \
+      gnupg \
+      git \
+      software-properties-common \
+      python3-dev \
+      default-libmysqlclient-dev \
+      build-essential
 
 # Create non-root user and configure it for the project to run correctly with it.
 # ref: https://github.com/moby/moby/issues/5419#issuecomment-41478290
