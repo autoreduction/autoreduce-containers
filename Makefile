@@ -28,8 +28,10 @@ mantid_6.3:
 	sudo docker push $(GHCR)/runner-mantid:6.3.0
 
 webapp:
-	docker build -t $(GHCR)/autoreduce-frontend:$(DATE_LABEL) -f ../frontend/container/webapp.D ../frontend
-	docker tag $(GHCR)/autoreduce-frontend:$(DATE_LABEL) $(GHCR)/autoreduce-frontend:latest
+	sudo docker build -t $(GHCR)/autoreduce-frontend:$(DATE_LABEL) -f ../frontend/container/webapp.D ../frontend
+	sudo docker tag $(GHCR)/autoreduce-frontend:$(DATE_LABEL) $(GHCR)/autoreduce-frontend:latest
+	sudo docker push $(GHCR)/autoreduce-frontend:$(DATE_LABEL)
+	sudo docker push $(GHCR)/autoreduce-frontend:latest
 
 rest-api:
 	sudo docker build -t $(GHCR)/autoreduce-rest-api:$(DATE_LABEL) -f ../rest-api/container/rest-api.D ../rest-api
