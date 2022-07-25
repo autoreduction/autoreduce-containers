@@ -15,17 +15,17 @@ qp:
 	sudo docker push $(GHCR)/autoreduce:$(DATE_LABEL)
 	sudo docker push $(GHCR)/autoreduce:latest
 
-mantid_6.4:
-	sudo docker build -t $(GHCR)/runner-mantid:$(DATE_LABEL) -f ../queue-processor/container/runner_py38_mantid.Dockerfile ../queue-processor --build-arg MANTID_VERSION=6.4
-	sudo docker tag $(GHCR)/runner-mantid:$(DATE_LABEL) $(GHCR)/runner-mantid:6.4.0
+mantid_latest:
+	sudo docker build -t $(GHCR)/runner-mantid:$(DATE_LABEL) -f ../queue-processor/container/runner_py38_mantid.Dockerfile ../queue-processor
+	sudo docker tag $(GHCR)/runner-mantid:$(DATE_LABEL) $(GHCR)/runner-mantid:latest
 	sudo docker push $(GHCR)/runner-mantid:$(DATE_LABEL)
-	sudo docker push $(GHCR)/runner-mantid:6.4.0
+	sudo docker push $(GHCR)/runner-mantid:latest
 
-mantid_6.3:
-	sudo docker build -t $(GHCR)/runner-mantid:$(DATE_LABEL) -f ../queue-processor/container/runner_py38_mantid.Dockerfile ../queue-processor --build-arg MANTID_VERSION=6.3
-	sudo docker tag $(GHCR)/runner-mantid:$(DATE_LABEL) $(GHCR)/runner-mantid:6.3.0
+mantid_nightly:
+	sudo docker build -t $(GHCR)/runner-mantid:$(DATE_LABEL) -f ../queue-processor/container/runner_py38_mantid.Dockerfile ../queue-processor --build-arg NIGHTLY=True
+	sudo docker tag $(GHCR)/runner-mantid:$(DATE_LABEL) $(GHCR)/runner-mantid:nightly
 	sudo docker push $(GHCR)/runner-mantid:$(DATE_LABEL)
-	sudo docker push $(GHCR)/runner-mantid:6.3.0
+	sudo docker push $(GHCR)/runner-mantid:nightly
 
 webapp:
 	sudo docker build -t $(GHCR)/autoreduce-frontend:$(DATE_LABEL) -f ../frontend/container/webapp.D ../frontend
