@@ -18,7 +18,11 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update &&\
 # Create non-root user and configure it for the project to run correctly with it.
 # ref: https://github.com/moby/moby/issues/5419#issuecomment-41478290
 # note: this user ID shouldn't be changed as it's expected by the rest of the system
-RUN useradd -m --no-log-init -s /bin/bash -u 880844730 isisautoreduce
+RUN groupadd -g 998 docker \
+    && groupadd -g 880844730 isisautoreduce \
+    && useradd -u 880844730 -g 880844730 -m -s /bin/bash --no-log-init isisautoreduce \
+    && usermod -aG docker isisautoreduce
+
 USER isisautoreduce
 WORKDIR /home/isisautoreduce
 
